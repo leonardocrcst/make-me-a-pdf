@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Informe sobre a Renda da Pessoa Física</title>
+    <style>
+        td, th {
+            padding: 4px;
+        }
+
+        .section-title {
+            font-weight: bold;
+            padding-top: 8px;
+        }
+    </style>
+</head>
+<body>
+<table style="border-collapse: collapse; width: 206mm; margin: -1cm 0 0 -1cm">
+    <tr>
+        <th colspan="6" style="width: 103mm; border: 1px solid">
+            Imposto sobre a Renda da Pessoa Física<br>
+            Exercício de {{$exercicio}}
+        </th>
+        <th colspan="6" style="width: 103mm; border: 1px solid">
+            Comprovante de Rendimentos Pagos e de Imposto sobre a Renda Retido na Fonte<br>
+            Ano-calendário de {{$anoCalendario}}
+        </th>
+    </tr>
+    <tr>
+        <td colspan="12" style="width: 206mm" class="section-title">
+            1. Fonte Pagadora Pessoa Jurídica ou Pessoa Física
+        </td>
+    </tr>
+    <tr>
+        <td colspan="6" style="width: 103mm; border: 1px solid">
+            CNPJ/CPF: {{$documentoFontePagadora}}
+        </td>
+        <td colspan="6" style="width: 103mm; border: 1px solid">
+            Nome Empresarial / Nome Completo: {{$nomeFontePagadora}}
+        </td>
+    </tr>
+    <tr>
+        <td colspan="12" style="width: 206mm" class="section-title">
+            2. Pessoa Física Beneficiária dos Rendimentos
+        </td>
+    </tr>
+    <tr>
+        <td colspan="6" style="width: 103mm; border: 1px solid">
+            CPF: {{$documentoBeneficiario}}
+        </td>
+        <td colspan="6" style="width: 103mm; border: 1px solid">
+            Nome Completo: {{$nomeBeneficiario}}
+        </td>
+    </tr>
+    <tr>
+        <td colspan="12" style="width: 206mm; border: 1px solid">
+            Natureza do Rendimento: {{$naturezaRendimento}}
+        </td>
+    </tr>
+</table>
+</body>
+</html>
