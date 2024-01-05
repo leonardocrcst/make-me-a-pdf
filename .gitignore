@@ -1,4 +1,4 @@
-/public
 /vendor
 /log
 .idea
+/public/output/*
