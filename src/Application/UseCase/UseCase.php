@@ -3,12 +3,17 @@
 namespace App\Application\UseCase;
 
 use App\Application\Response\JsonResponseInterface;
-use Dompdf\Dompdf;
+use App\Model\HtmlToPdf;
+use App\Model\Type\Orientation;
+use App\Model\Type\Paper;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 abstract class UseCase
 {
+    public const string OUTPUT_FOLDER = __DIR__ . '/../../../public/output/';
+    public const string TEMPLATE_FOLDER = __DIR__ . '/../Template/';
+
     protected ServerRequestInterface $request;
     protected ResponseInterface $response;
     protected array $requestContent = [];
@@ -30,25 +35,12 @@ abstract class UseCase
 
     protected function createFromTemplate(string $templateFile): JsonResponse
     {
-        $template = file_get_contents(__DIR__ . "/../Template/$templateFile");
         $filename = $this->getFilename();
-        if (!file_exists(__DIR__ . '/../../../public/output/' . $filename)) {
-            $html = $this->parseContent($template);
-            $this->createPdf($html, $filename);
+        if (!file_exists(self::OUTPUT_FOLDER . $filename)) {
+            $template = file_get_contents(self::TEMPLATE_FOLDER . $templateFile);
+            $this->createPdf($template, $filename);
         }
         return new JsonResponse($this->getPath($filename));
-    }
-
-    protected function parseContent(string $template): string
-    {
-        $html = $template;
-        foreach ($this->requestContent as $key => $value) {
-            if (is_array($value)) {
-                $value = implode('<br>', $value);
-            }
-            $html = str_replace("{{\$$key}}", $value, $html);
-        }
-        return $html;
     }
 
     protected function getFilename(): string
@@ -58,12 +50,9 @@ abstract class UseCase
 
     protected function createPdf(string $html, string $filename): void
     {
-        $dompdf = new Dompdf();
-        $dompdf->loadHtml($html);
-        $dompdf->setPaper('A4');
-        $dompdf->render();
-        $generated = $dompdf->output();
-        file_put_contents(__DIR__.'/../../../public/output/' . $filename, $generated);
+        $generated = (new HtmlToPdf($html, $this->requestContent))
+            ->create(Paper::A4, Orientation::PORTRAIT);
+        file_put_contents(self::OUTPUT_FOLDER . $filename, $generated);
     }
 
     protected function getPath(string $filename): string
